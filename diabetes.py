@@ -1,9 +1,8 @@
 import numpy as np
 import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
 import os
-import plotly.express as px
-import plotly.graph_objects as go
 import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
@@ -21,22 +20,19 @@ print(df.describe())
 print(df.isnull().sum())
 print(df.duplicated().sum())
 
-# Age distribution plot using plotly
-fig_age_dist = px.histogram(df, x='Age', title='Age Distribution')
-fig_age_dist.show()
+# Age distribution plot using seaborn
+sns.displot(df['Age'], kde=True)
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
 
 # Disease frequency for ages
-age_outcome_ct = pd.crosstab(df.Age, df.Outcome).reset_index()
-fig_age_outcome = px.bar(age_outcome_ct, x='Age', y=[0, 1], 
-                         labels={'value': 'Frequency', 'variable': 'Outcome'}, 
-                         title='Disease Frequency for Ages',
-                         barmode='group')
-fig_age_outcome.update_layout(
-    xaxis_title='Age',
-    yaxis_title='Frequency',
-    legend_title_text='Outcome'
-)
-fig_age_outcome.show()
+pd.crosstab(df.Age, df.Outcome).plot(kind="bar", figsize=(20, 6), color=['yellow', 'blue'])
+plt.title('Disease Frequency for Ages')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
 
 # Splitting the dataset
 X = df.drop('Outcome', axis=1)
